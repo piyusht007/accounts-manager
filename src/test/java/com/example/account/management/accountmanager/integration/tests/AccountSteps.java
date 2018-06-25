@@ -65,6 +65,7 @@ public class AccountSteps {
     public void customer_name_should_get_a_new_current_account_with_opening_balance(final String customerName,
                                                                                     final String expectedBalance) {
 
+        sleep(1);
         final String customerId = customerFirstNameToId.get(customerName);
         final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getAccountId(),
                                                              String.valueOf(customerId));
@@ -107,5 +108,13 @@ public class AccountSteps {
             final AccountCreateResponse accountCreateResponse = accountService.create(accountCreateRequest);
             customerFirstNameToId.put(customerLine.firstName, accountCreateResponse.getCustomerId());
         });
+    }
+
+    private void sleep(final long seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -60,6 +60,8 @@ public class AccountServiceTest {
         final AccountCreateResponse accountCreateResponse = createPrimaryAccount(firstName, lastName, initialCredit);
 
         // When
+        sleep(1);
+
         final AccountsInfo accountsInfo = accountService.get(accountCreateResponse.getAccountId(),
                                                              accountCreateResponse.getCustomerId());
         final AccountSummary actualAccountSummary = accountsInfo.getAccountSummaries().stream().findFirst().get();
@@ -131,6 +133,9 @@ public class AccountServiceTest {
 
         // When
         final AccountCreateResponse secondaryAccountCreateResponse = accountService.create(secondaryAccountCreateRequest);
+
+        sleep(1);
+
         final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getAccountId(),
                                                              secondaryAccountCreateResponse.getCustomerId());
         final AccountSummary accountSummary = accountsInfo.getAccountSummaries().stream().findFirst().get();
@@ -155,7 +160,15 @@ public class AccountServiceTest {
 
         // When, Then throw exception.
         final AccountCreateResponse secondaryAccountCreateResponse = accountService.create(secondaryAccountCreateRequest);
-        final AccountsInfo accountsInfo = accountService.get(null, secondaryAccountCreateResponse.getCustomerId());
+        accountService.get(null, secondaryAccountCreateResponse.getCustomerId());
+    }
+
+    private void sleep(final long seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private SecondaryAccountCreateRequest createSecondaryAccountCreateRequest(final String customerId) {
