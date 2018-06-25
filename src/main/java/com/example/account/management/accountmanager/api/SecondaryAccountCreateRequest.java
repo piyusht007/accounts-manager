@@ -7,6 +7,9 @@ public class SecondaryAccountCreateRequest {
     private String customerId;
     private String initialCredit;
 
+    SecondaryAccountCreateRequest() {
+    }
+
     public SecondaryAccountCreateRequest(final String customerId) {
         this.customerId = customerId;
     }
