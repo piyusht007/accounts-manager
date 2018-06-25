@@ -20,7 +20,7 @@ Use following maven command to run integration tests:
 We can see the test reports on following location: 
 **cucumber/test-reports/index.html**
 
-**Sequence Diagram:** Sequence diagram to explain the account creation flow: src/main/resources/sequence_diagrams       
+**Sequence Diagram:** Sequence diagram to explain the account creation flow: src/main/resources/sequence-diagrams       
 
 
 ## Test the application in following steps using any rest client:
