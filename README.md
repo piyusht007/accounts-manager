@@ -23,7 +23,7 @@ We can see the test reports on following location:
 **Sequence Diagram:** Sequence diagram to explain the account creation flow: src/main/resources/sequence_diagrams       
 
 
-**Test the application using in following steps using any rest client:**
+##Test the application in following steps using any rest client:
 
 **1. Create a primary account:**
 
@@ -69,19 +69,19 @@ We can see the test reports on following location:
 **Response:**
 ```
 {
-	  "accountSummaries": [{
-	  "accountId": "6094785286911000670",
-	  "customerId": "4129870677315811375",
-	  "firstName": "Piyush",
-	  "lastName": "Tiwari",
-	  "balance": 2000.0,
-	  "transactions": [{
-		    "id": "48f97e76-18f2-44c6-84c0-8a6f186feb71",
-		    "date": "2018-06-25T18:38:46.8015667",
-		    "type": "CREDIT",
-		    "amount": 2000.0
-	   }]
-	  }]
+	"accountSummaries": [{
+		"accountId": "6094785286911000670",
+		"customerId": "4129870677315811375",
+		"firstName": "Piyush",
+		"lastName": "Tiwari",
+		"balance": 2000.0,
+		"transactions": [{
+			"id": "48f97e76-18f2-44c6-84c0-8a6f186feb71",
+			"date": "2018-06-25T18:38:46.8015667",
+			"type": "CREDIT",
+			"amount": 2000.0
+		}]
+	}]
 }
 ```
 
