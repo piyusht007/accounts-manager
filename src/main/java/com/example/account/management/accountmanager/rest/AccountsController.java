@@ -5,12 +5,9 @@ import com.example.account.management.accountmanager.api.SecondaryAccountCreateR
 import com.example.account.management.accountmanager.api.AccountCreateResponse;
 import com.example.account.management.accountmanager.api.AccountsInfo;
 import com.example.account.management.accountmanager.api.service.AccountService;
-import com.example.account.management.accountmanager.service.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
-import javax.security.auth.login.AccountNotFoundException;
 
 @RestController
 @RequestMapping("/accounts-management/accounts")
@@ -33,11 +30,9 @@ public class AccountsController implements AccountService {
     }
 
     @Override
-    @RequestMapping(value = "/{accountId}/customer/{customerId}", method = RequestMethod.GET)
-    public @ResponseBody AccountsInfo get(
-            final @PathVariable String accountId,
-            final @PathVariable String customerId) {
-        return accountService.get(accountId, customerId);
+    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
+    public @ResponseBody AccountsInfo get(final @PathVariable String customerId) {
+        return accountService.get(customerId);
     }
 
     @Override

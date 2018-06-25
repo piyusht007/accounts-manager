@@ -67,8 +67,7 @@ public class AccountSteps {
 
         sleep(1);
         final String customerId = customerFirstNameToId.get(customerName);
-        final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getAccountId(),
-                                                             String.valueOf(customerId));
+        final AccountsInfo accountsInfo = accountService.get(String.valueOf(customerId));
 
         Assert.assertNotNull(accountsInfo);
 
@@ -87,7 +86,6 @@ public class AccountSteps {
         Assert.assertEquals(secondaryAccountCreateResponse.getCustomerId(), accountSummary.getCustomerId());
         Assert.assertEquals(Double.valueOf(expectedBalance), accountSummary.getBalance());
         Assert.assertEquals(customerName, accountSummary.getFirstName());
-
         assertTransactions(expectedBalance, accountSummary.getTransactions());
     }
 

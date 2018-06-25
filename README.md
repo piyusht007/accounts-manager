@@ -40,8 +40,8 @@ We can see the test reports on following location:
 **Response:**
 ```
 {
-  "accountId": "6590657441575742343",
-  "customerId": "4129870677315811375"
+  "accountId": "1325248128977157752",
+  "customerId": "2442828243899034888"
 }
 ```
 **2. Create a secondary account with the customer id received in above response:**
@@ -51,33 +51,45 @@ We can see the test reports on following location:
 **Request Payload:**
 ```
 {
-  "customerId": "4129870677315811375",
+  "customerId": "2442828243899034888",
   "initialCredit": "2000"
 }
 ```
 **Response:**
 ```
 {
-  "accountId": "6094785286911000670",
-  "customerId": "4129870677315811375"
+  "accountId": "6038069432489713146",
+  "customerId": "2442828243899034888"
 }
 ```
 **3. Fetch the account summary for above account id and customer id:** 
 
-`GET http://localhost:8080/accounts-management/accounts/6094785286911000670/customer/4129870677315811375`
+`GET http://localhost:8080/accounts-management/accounts/customer/2442828243899034888`
 
 **Response:**
 ```
 {
 	"accountSummaries": [{
-		"accountId": "6094785286911000670",
-		"customerId": "4129870677315811375",
+		"accountId": "1325248128977157752",
+		"customerId": "2442828243899034888",
 		"firstName": "Piyush",
 		"lastName": "Tiwari",
 		"balance": 2000.0,
 		"transactions": [{
-			"id": "48f97e76-18f2-44c6-84c0-8a6f186feb71",
-			"date": "2018-06-25T18:38:46.8015667",
+			"id": "b30b9c9c-3f8c-4f49-b444-3f011f1d19db",
+			"date": "2018-06-25T20:19:50.5455667",
+			"type": "CREDIT",
+			"amount": 2000.0
+		}]
+	}, {
+		"accountId": "6038069432489713146",
+		"customerId": "2442828243899034888",
+		"firstName": "Piyush",
+		"lastName": "Tiwari",
+		"balance": 2000.0,
+		"transactions": [{
+			"id": "56cf70f9-234b-4de5-8f00-2397f3b25f4f",
+			"date": "2018-06-25T20:20:15.9405667",
 			"type": "CREDIT",
 			"amount": 2000.0
 		}]

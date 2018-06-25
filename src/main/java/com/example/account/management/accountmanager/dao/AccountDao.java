@@ -20,11 +20,10 @@ public class AccountDao {
         return accounts.stream().filter(account -> account.getNumber().equals(accountId)).findFirst();
     }
 
-    public List<Account> getByCustomerId(final String accountId,
-                                         final String customerId) {
+    public Set<Account> getByCustomerId(final String customerId) {
         return accounts.stream()
-                       .filter(account -> account.getNumber().equals(accountId) && account.getCustomerId().equals(customerId))
-                       .collect(Collectors.toList());
+                       .filter(account -> account.getCustomerId().equals(customerId))
+                       .collect(Collectors.toSet());
     }
 
     public void deleteAll() {

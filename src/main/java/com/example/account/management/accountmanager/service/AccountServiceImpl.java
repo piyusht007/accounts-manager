@@ -4,7 +4,6 @@ import com.example.account.management.accountmanager.api.*;
 import com.example.account.management.accountmanager.api.service.CustomerService;
 import com.example.account.management.accountmanager.api.service.TransactionsService;
 import com.example.account.management.accountmanager.dao.AccountDao;
-import com.example.account.management.accountmanager.dao.CustomerDao;
 import com.example.account.management.accountmanager.model.Account;
 import com.example.account.management.accountmanager.model.Customer;
 import com.example.account.management.accountmanager.model.Transaction;
@@ -15,10 +14,7 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -55,13 +51,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountsInfo get(final String accountId,
-                            final String customerId) {
+    public AccountsInfo get(final String customerId) {
         final Customer customer = customerService.get(customerId);
-        final List<Account> accounts = accountDao.getByCustomerId(accountId, customerId);
+        final Set<Account> accounts = accountDao.getByCustomerId(customerId);
 
         if( accounts == null || accounts.isEmpty() ) {
-            throw new AccountsNotFoundException(Errors.ACCOUNTS_NOT_FOUND.getMessage() + accountId + ", " + customerId);
+            throw new AccountsNotFoundException(Errors.ACCOUNTS_NOT_FOUND.getMessage() + customerId);
         } else {
             final List<AccountSummary> accountSummaries = new ArrayList<>();
 

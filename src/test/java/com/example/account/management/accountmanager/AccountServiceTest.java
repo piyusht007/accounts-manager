@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 public class AccountServiceTest {
@@ -41,8 +43,7 @@ public class AccountServiceTest {
         final AccountCreateResponse accountCreateResponse = createPrimaryAccount(firstName, lastName, null);
 
         // When
-        final AccountsInfo accountsInfo = accountService.get(accountCreateResponse.getAccountId(),
-                                                             accountCreateResponse.getCustomerId());
+        final AccountsInfo accountsInfo = accountService.get(accountCreateResponse.getCustomerId());
         final AccountSummary actualAccountSummary = accountsInfo.getAccountSummaries().stream().findFirst().get();
 
         // Then
@@ -62,8 +63,7 @@ public class AccountServiceTest {
         // When
         sleep(1);
 
-        final AccountsInfo accountsInfo = accountService.get(accountCreateResponse.getAccountId(),
-                                                             accountCreateResponse.getCustomerId());
+        final AccountsInfo accountsInfo = accountService.get(accountCreateResponse.getCustomerId());
         final AccountSummary actualAccountSummary = accountsInfo.getAccountSummaries().stream().findFirst().get();
 
         // Then
@@ -94,7 +94,7 @@ public class AccountServiceTest {
 
     @Test(expected = CustomerNotFoundException.class)
     public void testGetAccountDetailsExpectedExceptionWhenInvalidCustomerIdIsProvided() {
-        accountService.get(null, null);
+        accountService.get(null);
     }
 
     @Test
@@ -109,14 +109,31 @@ public class AccountServiceTest {
 
         // When
         final AccountCreateResponse secondaryAccountCreateResponse = accountService.create(secondaryAccountCreateRequest);
-        final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getAccountId(),
-                                                             secondaryAccountCreateResponse.getCustomerId());
-        final AccountSummary accountSummary = accountsInfo.getAccountSummaries().stream().findFirst().get();
+
+        sleep(1);
+
+        final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getCustomerId());
+        final List<AccountSummary> accountSummaries = accountsInfo.getAccountSummaries();
 
         // Then
-        Assert.assertEquals(Double.valueOf(0), accountSummary.getBalance());
-        Assert.assertEquals(firstName, accountSummary.getFirstName());
-        Assert.assertEquals(lastName, accountSummary.getLastName());
+        final AccountSummary primaryAccountSummary = getAccountSummary(accountCreateResponse, accountSummaries);
+        final AccountSummary secondaryAccountSummary = getAccountSummary(secondaryAccountCreateResponse, accountSummaries);
+
+        Assert.assertEquals(Double.valueOf(1000), primaryAccountSummary.getBalance());
+        Assert.assertEquals(firstName, primaryAccountSummary.getFirstName());
+        Assert.assertEquals(lastName, primaryAccountSummary.getLastName());
+
+        Assert.assertEquals(Double.valueOf(0), secondaryAccountSummary.getBalance());
+        Assert.assertEquals(firstName, secondaryAccountSummary.getFirstName());
+        Assert.assertEquals(lastName, secondaryAccountSummary.getLastName());
+    }
+
+    private AccountSummary getAccountSummary(final AccountCreateResponse accountCreateResponse,
+                                             final List<AccountSummary> accountSummaries) {
+        return accountSummaries.stream()
+                               .filter(accountSummary -> accountSummary.getAccountId().equals(accountCreateResponse.getAccountId()))
+                               .findFirst()
+                               .get();
     }
 
     @Test
@@ -136,31 +153,20 @@ public class AccountServiceTest {
 
         sleep(1);
 
-        final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getAccountId(),
-                                                             secondaryAccountCreateResponse.getCustomerId());
-        final AccountSummary accountSummary = accountsInfo.getAccountSummaries().stream().findFirst().get();
+        final AccountsInfo accountsInfo = accountService.get(secondaryAccountCreateResponse.getCustomerId());
+        final List<AccountSummary> accountSummaries = accountsInfo.getAccountSummaries();
 
         // Then
-        Assert.assertEquals(Double.valueOf(1000), accountSummary.getBalance());
-        Assert.assertEquals(firstName, accountSummary.getFirstName());
-        Assert.assertEquals(lastName, accountSummary.getLastName());
-    }
+        final AccountSummary primaryAccountSummary = getAccountSummary(accountCreateResponse, accountSummaries);
+        final AccountSummary secondaryAccountSummary = getAccountSummary(secondaryAccountCreateResponse, accountSummaries);
 
-    @Test(expected = AccountsNotFoundException.class)
-    public void testGetAccountDetailsExpectedExceptionWhenInvalidAccountIdIsProvided() {
-        // Given
-        final String firstName = "Piyush";
-        final String lastName = "Tiwari";
-        final String initialCredit = "1000";
-        final AccountCreateResponse accountCreateResponse = createPrimaryAccount(firstName, lastName, initialCredit);
-        final SecondaryAccountCreateRequest secondaryAccountCreateRequest = createSecondaryAccountCreateRequest(
-                accountCreateResponse.getCustomerId());
+        Assert.assertEquals(Double.valueOf(1000), primaryAccountSummary.getBalance());
+        Assert.assertEquals(firstName, primaryAccountSummary.getFirstName());
+        Assert.assertEquals(lastName, primaryAccountSummary.getLastName());
 
-        secondaryAccountCreateRequest.setInitialCredit("1000");
-
-        // When, Then throw exception.
-        final AccountCreateResponse secondaryAccountCreateResponse = accountService.create(secondaryAccountCreateRequest);
-        accountService.get(null, secondaryAccountCreateResponse.getCustomerId());
+        Assert.assertEquals(Double.valueOf(1000), secondaryAccountSummary.getBalance());
+        Assert.assertEquals(firstName, secondaryAccountSummary.getFirstName());
+        Assert.assertEquals(lastName, secondaryAccountSummary.getLastName());
     }
 
     private void sleep(final long seconds) {
