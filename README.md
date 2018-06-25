@@ -23,7 +23,7 @@ We can see the test reports on following location:
 **Sequence Diagram:** Sequence diagram to explain the account creation flow: src/main/resources/sequence_diagrams       
 
 
-##Test the application in following steps using any rest client:
+## Test the application in following steps using any rest client:
 
 **1. Create a primary account:**
 
